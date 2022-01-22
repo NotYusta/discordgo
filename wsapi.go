@@ -333,7 +333,7 @@ type updateStatusOp struct {
 	Data UpdateStatusData `json:"d"`
 }
 
-func newUpdateStatusData(idle int, activityType ActivityType, name, url string) *UpdateStatusData {
+func UpdateStatusDataSimple(idle int, activityType ActivityType, name, url string) *UpdateStatusData {
 	usd := &UpdateStatusData{
 		Status: "online",
 	}
@@ -358,7 +358,7 @@ func newUpdateStatusData(idle int, activityType ActivityType, name, url string) 
 // If name!="" then set game.
 // if otherwise, set status to active, and no activity.
 func (s *Session) UpdateGameStatus(idle int, name string) (err error) {
-	return s.UpdateStatusComplex(*newUpdateStatusData(idle, ActivityTypeGame, name, ""))
+	return s.UpdateStatusComplex(*UpdateStatusDataSimple(idle, ActivityTypeGame, name, ""))
 }
 
 // UpdateStreamingStatus is used to update the user's streaming status.
@@ -371,14 +371,14 @@ func (s *Session) UpdateStreamingStatus(idle int, name string, url string) (err 
 	if url != "" {
 		gameType = ActivityTypeStreaming
 	}
-	return s.UpdateStatusComplex(*newUpdateStatusData(idle, gameType, name, url))
+	return s.UpdateStatusComplex(*UpdateStatusDataSimple(idle, gameType, name, url))
 }
 
 // UpdateListeningStatus is used to set the user to "Listening to..."
 // If name!="" then set to what user is listening to
 // Else, set user to active and no activity.
 func (s *Session) UpdateListeningStatus(name string) (err error) {
-	return s.UpdateStatusComplex(*newUpdateStatusData(0, ActivityTypeListening, name, ""))
+	return s.UpdateStatusComplex(*UpdateStatusDataSimple(0, ActivityTypeListening, name, ""))
 }
 
 // UpdateStatusComplex allows for sending the raw status update data untouched by discordgo.
